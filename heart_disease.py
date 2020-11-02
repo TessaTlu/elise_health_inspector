@@ -2,6 +2,7 @@ import pandas as pd
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
+from sklearn.impute import SimpleImputer
 import numpy as np
 def heart():
     heart_data = pd.read_csv('heart.csv')
@@ -17,6 +18,7 @@ def heart():
     print("Hello, my name is Indi")  
     print("I am going give you advices based on your analysis results")
     print("to talk about your health prepare latests analysis +_+")
+    print("If you have not some analysis, type -1 instead of result")
     print("Firstly, how old are you?")
     age=input()
     print("Are you female(0) or male(1)?")
@@ -52,7 +54,18 @@ def heart():
     print("Had you heart defects before?") 
     print("Type 1 if not, 2 if your defect was fixed or 3 if you have reversable one") 
     thal=input()
+    # Fill in the lines below: imputation
+    my_imputer = SimpleImputer(strategy = 'mean') # Your code here
+    Xt=np.array(X)
     patient=np.array([age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak, slope, ca, thal])
+    for i in range (len(patient)):
+        if(patient[i]==-1):
+            patient[i]=float("Nan")
+    Xt = np.vstack((Xt, patient))
+    Xt = pd.DataFrame(Xt)
+    imputed_Xt = pd.DataFrame(my_imputer.fit_transform(Xt))
+    imputed_Xt=np.array(imputed_Xt)
+    patient=imputed_Xt[-1]
     patient=patient.reshape(1, -1)
     patientsheart=heart_model.predict(patient)
     patientsheart=np.int64(np.around(patientsheart, decimals=0))
@@ -64,4 +77,4 @@ def heart():
     else:
         print("I did not find any reason to be worry")
         print("have a nice day :3")
-    input()
+    
