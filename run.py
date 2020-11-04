@@ -1,4 +1,4 @@
 import heart_disease
 from heart_disease import heart ### Checking git posibilities
-heart()
+heart()   ### Gui change
 input()
