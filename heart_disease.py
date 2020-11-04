@@ -55,12 +55,22 @@ def heart():
     print("Type 1 if not, 2 if your defect was fixed or 3 if you have reversable one") 
     thal=input()
     # Fill in the lines below: imputation
+    from sklearn.impute import SimpleImputer
+
+    # Fill in the lines below: imputation
     my_imputer = SimpleImputer(strategy = 'mean') # Your code here
-    Xt=np.array(X)
+    indexNames = heart_data[heart_data['target'] == 1].index
+    heart_data_save=heart_data
+    heart_data.drop(indexNames , inplace=True)
+    Xt=heart_data
+    Xt=Xt[features]
+    Xt=np.array(Xt)
+    skipped = 0
     patient=np.array([age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak, slope, ca, thal])
     for i in range (len(patient)):
         if(patient[i]==-1):
             patient[i]=float("Nan")
+            skipped = 1
     Xt = np.vstack((Xt, patient))
     Xt = pd.DataFrame(Xt)
     imputed_Xt = pd.DataFrame(my_imputer.fit_transform(Xt))
@@ -68,13 +78,18 @@ def heart():
     patient=imputed_Xt[-1]
     patient=patient.reshape(1, -1)
     patientsheart=heart_model.predict(patient)
+    score_disease=float(patientsheart)
     patientsheart=np.int64(np.around(patientsheart, decimals=0))
     patientsheart=int(patientsheart)
-    if(patientsheart==1):
-        print("Most likely you have a heart-disease")
-        print("you need to undergo a comprehensive examination to determine the cause of your heart disease")
-        print("dont worry, its fixable :*")
+    if(score_disease>=0.45 and score_disease<=0.55 and skipped == 1):
+        print("I'm sorry, but the tests you entered aren't enough to make a prediction")
+        print("Try to pass more tests and come back again")
     else:
-        print("I did not find any reason to be worry")
-        print("have a nice day :3")
+        if(patientsheart==1):
+            print("Most likely you have a heart-disease")
+            print("you need to undergo a comprehensive examination to determine the cause of your heart disease")
+            print("dont worry, its fixable :*")
+        else:
+            print("I did not find any reason to be worry")
+            print("have a nice day :3")
     
