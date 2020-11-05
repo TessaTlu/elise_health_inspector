@@ -1,20 +1,47 @@
 import pandas as pd
-from sklearn.metrics import accuracy_score
+import numpy as np  
 from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.impute import SimpleImputer
-import numpy as np
+from keras import models 
+from keras import layers
+from keras import optimizers
+from keras import losses
+from keras import metrics
+from tensorflow.keras import Sequential
+from tensorflow.keras.layers import Dense
 def heart():
+    ### Загрузка данных, деление на тестовые и обучающие данные ###
     heart_data = pd.read_csv('heart.csv')
     y = heart_data.target
     features = ['age', 'sex', 'cp', 'trestbps', 'chol', 'fbs', 'restecg', 'thalach', 'exang', 'oldpeak', 'slope', 'ca', 'thal']
     X = heart_data[features]
-    train_X, val_X, train_y, val_y = train_test_split(X, y, random_state=1)
-    heart_model = RandomForestClassifier(random_state=1, min_samples_leaf = 6)
-    heart_model.fit(train_X, train_y)
-    predictions = heart_model.predict(val_X)
-    predictions = np.int64(np.around(predictions, decimals = 0))
-    val_mae = accuracy_score(predictions, val_y)
+    train_X, val_X, train_y, val_y = train_test_split(X, y, train_size=0.8, test_size=0.2, random_state=1)
+    train_data=np.int8(np.array(train_X))
+    train_labels=np.int8(np.array(train_y))
+    test_data=np.int8(np.array(val_X))
+    test_labels=np.int8(np.array(val_y))
+    train_data = train_data.tolist()
+    test_data = test_data.tolist()
+    def normalize(sequences, dimension = 128):
+        results = np.zeros((len(sequences), dimension))
+        for i, sequence in enumerate(sequences):
+            results[i, sequence]=1
+        return results
+    x_train=normalize(train_data)
+    x_test=normalize(test_data)
+    y_train=np.asarray(train_labels).astype('float32')
+    y_test=np.asarray(test_labels).astype('float32')
+
+    model = models.Sequential()
+    model = models.Sequential()
+    model.add(layers.Dense(16, activation = 'relu', input_shape = (128, )))
+    model.add(layers.Dense(16, activation = 'relu'))
+    model.add(layers.Dense(1, activation='sigmoid'))
+
+    model.compile(optimizer='rmsprop',
+                loss='binary_crossentropy',
+                metrics=['accuracy'])
+
+    model.fit(x_train, y_train, epochs = 36, batch_size=16)
     print("Hello, my name is Indi")  
     print("I am going give you advices based on your analysis results")
     print("to talk about your health prepare latests analysis +_+")
@@ -76,12 +103,12 @@ def heart():
     imputed_Xt = pd.DataFrame(my_imputer.fit_transform(Xt))
     imputed_Xt=np.array(imputed_Xt)
     patient=imputed_Xt[-1]
-    patient=patient.reshape(1, -1)
-    patientsheart=heart_model.predict(patient)
+    patient=normalize(patient.reshape(1, -1))
+    patientsheart=model.predict(patient)
     score_disease=float(patientsheart)
     patientsheart=np.int64(np.around(patientsheart, decimals=0))
     patientsheart=int(patientsheart)
-    if((score_disease>=0.45 and score_disease<=0.55 and skipped > 0) or skipped > 5):
+    if((score_disease>=0.45 and score_disease<=0.55 and skipped > 0)):
         print("I'm sorry, but the tests you entered aren't enough to make a prediction")
         print("Try to pass more tests and come back again")
     else:
