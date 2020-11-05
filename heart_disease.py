@@ -1,7 +1,7 @@
 import pandas as pd
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestRegressor
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.impute import SimpleImputer
 import numpy as np
 def heart():
@@ -10,7 +10,7 @@ def heart():
     features = ['age', 'sex', 'cp', 'trestbps', 'chol', 'fbs', 'restecg', 'thalach', 'exang', 'oldpeak', 'slope', 'ca', 'thal']
     X = heart_data[features]
     train_X, val_X, train_y, val_y = train_test_split(X, y, random_state=1)
-    heart_model = RandomForestRegressor(random_state=1, min_samples_leaf = 6)
+    heart_model = RandomForestClassifier(random_state=1, min_samples_leaf = 6)
     heart_model.fit(train_X, train_y)
     predictions = heart_model.predict(val_X)
     predictions = np.int64(np.around(predictions, decimals = 0))
@@ -70,7 +70,7 @@ def heart():
     for i in range (len(patient)):
         if(patient[i]==-1):
             patient[i]=float("Nan")
-            skipped = 1
+            skipped +=1
     Xt = np.vstack((Xt, patient))
     Xt = pd.DataFrame(Xt)
     imputed_Xt = pd.DataFrame(my_imputer.fit_transform(Xt))
@@ -81,7 +81,7 @@ def heart():
     score_disease=float(patientsheart)
     patientsheart=np.int64(np.around(patientsheart, decimals=0))
     patientsheart=int(patientsheart)
-    if(score_disease>=0.45 and score_disease<=0.55 and skipped == 1):
+    if((score_disease>=0.45 and score_disease<=0.55 and skipped > 0) or skipped > 5):
         print("I'm sorry, but the tests you entered aren't enough to make a prediction")
         print("Try to pass more tests and come back again")
     else:
@@ -92,4 +92,5 @@ def heart():
         else:
             print("I did not find any reason to be worry")
             print("have a nice day :3")
+    print(score_disease)
     
