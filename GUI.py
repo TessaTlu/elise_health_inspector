@@ -11,6 +11,8 @@ layout_1 = [[sg.Text('Hello there!'),
 window_ = sg.Window('Health_disease', icon='icon.ico').Layout(layout_1)
 while True:
     event, values = window_.read()
+    if event == 'heart':
+        heart()
     if event == sg.WIN_CLOSED or event == 'Exit':
         break
     if event == 'x-ray':
