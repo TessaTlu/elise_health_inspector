@@ -69,7 +69,7 @@ def heart():
     print("What is a largest value of your heart BPM?")
     thalach=input()
     print("Did you work too hard on your last run?")
-    print("if your exercise induced angina type 1, or 2 if not")
+    print("if your exercise induced angina type 1, or 0 if not")
     exang=input()
     print("We need to know if you have myocardial ischemia")
     print("to do this, enter the value of the degree of ST depression induced by exercise relative to rest")
