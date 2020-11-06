@@ -6,8 +6,6 @@ from keras import layers
 from keras import optimizers
 from keras import losses
 from keras import metrics
-from tensorflow.keras import Sequential
-from tensorflow.keras.layers import Dense
 def heart():
     ### Загрузка данных, деление на тестовые и обучающие данные ###
     heart_data = pd.read_csv('heart.csv')
@@ -103,6 +101,7 @@ def heart():
     imputed_Xt = pd.DataFrame(my_imputer.fit_transform(Xt))
     imputed_Xt=np.array(imputed_Xt)
     patient=imputed_Xt[-1]
+    patient=np.int8(patient)
     patient=normalize(patient.reshape(1, -1))
     patientsheart=model.predict(patient)
     score_disease=float(patientsheart)
