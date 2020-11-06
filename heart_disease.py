@@ -39,7 +39,7 @@ def heart():
                 loss='binary_crossentropy',
                 metrics=['accuracy'])
 
-    model.fit(x_train, y_train, epochs = 36, batch_size=16)
+    model.fit(x_train, y_train, epochs = 20, batch_size=16)
     print("Hello, my name is Indi")  
     print("I am going give you advices based on your analysis results")
     print("to talk about your health prepare latests analysis +_+")
