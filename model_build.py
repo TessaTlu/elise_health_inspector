@@ -6,6 +6,11 @@ from keras import layers
 from keras import optimizers
 from keras import losses
 from keras import metrics
+def normalize(sequences, dimension = 128):
+    results = np.zeros((len(sequences), dimension))
+    for i, sequence in enumerate(sequences):
+        results[i, sequence]=1
+    return results
 def heart_fit():
     ### Загрузка данных, деление на тестовые и обучающие данные ###
     heart_data = pd.read_csv('heart.csv')
@@ -19,11 +24,6 @@ def heart_fit():
     test_labels=np.int8(np.array(val_y))
     train_data = train_data.tolist()
     test_data = test_data.tolist()
-    def normalize(sequences, dimension = 128):
-        results = np.zeros((len(sequences), dimension))
-        for i, sequence in enumerate(sequences):
-            results[i, sequence]=1
-        return results
     x_train=normalize(train_data)
     x_test=normalize(test_data)
     y_train=np.asarray(train_labels).astype('float32')
