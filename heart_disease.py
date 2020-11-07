@@ -6,6 +6,7 @@ from keras import layers
 from keras import optimizers
 from keras import losses
 from keras import metrics
+import os
 def heart():
     ### Загрузка данных, деление на тестовые и обучающие данные ###
     heart_data = pd.read_csv('heart.csv')
@@ -17,6 +18,7 @@ def heart():
         for i, sequence in enumerate(sequences):
             results[i, sequence]=1
         return results
+    os.system('cls' if os.name == 'nt' else 'clear')
     print("Hello, my name is Indi")  
     print("I am going give you advices based on your analysis results")
     print("to talk about your health prepare latests analysis +_+")
@@ -81,13 +83,15 @@ def heart():
     patient=np.int8(patient)
     patient=normalize(patient.reshape(1, -1))
 
-    from tensorflow.keras.models import load_model
-    model = load_model('final_model.h5')
+    from tensorflow import keras
+    model = keras.models.load_model("final_model")
     patientsheart=model.predict(patient)
 
     score_disease=float(patientsheart)
     patientsheart=np.int64(np.around(patientsheart, decimals=0))
     patientsheart=int(patientsheart)
+
+    os.system('cls' if os.name == 'nt' else 'clear')
     if((score_disease>=0.45 and score_disease<=0.55 and skipped > 0)):
         print("I'm sorry, but the tests you entered aren't enough to make a prediction")
         print("Try to pass more tests and come back again")

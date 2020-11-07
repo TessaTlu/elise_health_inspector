@@ -40,5 +40,5 @@ def heart_fit():
                 metrics=['accuracy'])
 
     model.fit(x_train, y_train, epochs = 20, batch_size=16)
-    model.save("final_model.h5")
+    model.save("final_model")
 heart_fit()
