@@ -6,10 +6,11 @@ from keras import layers
 from keras import optimizers
 from keras import losses
 from keras import metrics
-def heart():
+def heart_fit():
     ### Загрузка данных, деление на тестовые и обучающие данные ###
     heart_data = pd.read_csv('heart.csv')
     y = heart_data.target
+    features = ['age', 'sex', 'cp', 'trestbps', 'chol', 'fbs', 'restecg', 'thalach', 'exang', 'oldpeak', 'slope', 'ca', 'thal']
     X = heart_data[features]
     train_X, val_X, train_y, val_y = train_test_split(X, y, train_size=0.8, test_size=0.2, random_state=1)
     train_data=np.int8(np.array(train_X))
@@ -40,3 +41,4 @@ def heart():
 
     model.fit(x_train, y_train, epochs = 20, batch_size=16)
     model.save("final_model.h5")
+heart_fit()
