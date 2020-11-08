@@ -6,11 +6,12 @@ from tensorflow.keras import layers
 from tensorflow.keras import optimizers
 from tensorflow.keras import losses
 from tensorflow.keras import metrics
+from enter_results import person
 import time
 import sys
 import os
 ######### НЕОБХОДИМАЯ ДЛЯ ПОДГОТОВКИ ДАННЫХ ФУНКЦИЯ ###############
-def normalize(sequences, dimension = 128):
+def normalize(sequences, dimension = 65536):
     results = np.zeros((len(sequences), dimension))
     for i, sequence in enumerate(sequences):
         results[i, sequence]=1
@@ -21,68 +22,18 @@ def heart():
             time.sleep(0.02) 
             sys.stdout.write(typing)
             sys.stdout.flush()
-    def breathe():
-        print("\n")
-        time.sleep(0.5)
     ### Загрузка данных, деление на тестовые и обучающие данные ###
     heart_data = pd.read_csv('heart.csv')
     y = heart_data.target
     features = ['age', 'sex', 'cp', 'trestbps', 'chol', 'fbs', 'restecg', 'thalach', 'exang', 'oldpeak', 'slope', 'ca', 'thal']
-    os.system('cls' if os.name == 'nt' else 'clear')
-    message = ["Hello, my name is Indi"] 
-    typing_effect(message)
-    breathe()
-    message = ["I am going give you advices based on your analysis results"]
-    typing_effect(message)
-    breathe()
-    message = ["to talk about your health prepare latests analysis +_+"]
-    typing_effect(message)
-    breathe()
-    message = ["If you have not some analysis, type -1 instead of result"]
-    typing_effect(message)
-    breathe()
-    message = ["Firstly, how old are you?"]
-    typing_effect(message)
-    breathe()
     ###### ЭТАП ВВОДА ДАННЫХ ПОЛЬЗОВАТЕЛЯ С КЛАВИАТУРЫ ###########
-    age=input()
-    print("Are you female(0) or male(1)?")
-    sex=input()
-    print("Which chest pain type you have?")
-    print("this is a value between 0 and 3:")
-    cp=input()
-    print("I need to know your resting blood pressure in mm Hg, type it please:")
-    trestbps=input()
-    print("Do you love fried patato? :D")
-    print("dont answer, just type your serum cholestoral in mg/dl and I will know")
-    chol=input()
-    print("I hope dont have any problem with sweets +_+")
-    print("look at your fasting blood sugar")
-    print("if sugar > 120 mg/dl type 1 or 0 if not")
-    fbs = input()
-    print("I need data about a resting electrocardiographic results")
-    print("value should be between 0 and 2:")
-    restecg=input()
-    print("Heart beat determines whether you're alive or not")
-    print("What is a largest value of your heart BPM?")
-    thalach=input()
-    print("Did you work too hard on your last run?")
-    print("if your exercise induced angina type 1, or 0 if not")
-    exang=input()
-    print("We need to know if you have myocardial ischemia")
-    print("to do this, enter the value of the degree of ST depression induced by exercise relative to rest")
-    oldpeak=input()
-    print("I need to know the slope of the peak exercise ST segment too")
-    slope=input()
-    print("What is number of your major vessels (0-3) colored by flourosopy?")
-    ca=input()
-    print("Had you heart defects before?") 
-    print("Type 1 if not, 2 if your defect was fixed or 3 if you have reversable one") 
-    thal=input()
-    patient=[age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak, slope, ca, thal]
+    patient=person()
     for i in range(13):
         if(patient[i]==""):
-            patient[i]=-1
+            patient[i]= np.nan
+        else:
+            patient[i]=np.int64(patient[i])
+    patient = np.array(patient)
     ########## ОБРАБОТКА ОТСУТСТВУЮЩИХ У ПОЛЬЗОВАТЕЯ АНАЛИЗОВ ##############
     from sklearn.impute import SimpleImputer
 
@@ -94,7 +45,7 @@ def heart():
 
     healthy=healthy[features]
 
-    my_imputer = SimpleImputer(strategy = 'most_frequent', missing_values = -1) # Your code here
+    my_imputer = SimpleImputer(strategy = 'most_frequent') # Your code here
 
             
 
@@ -107,11 +58,14 @@ def heart():
 
     imputed_healthy=np.array(imputed_healthy)
     patient=imputed_healthy[-1]
-    patient=np.int8(patient)
+    patient = np.array(patient)
+    print(patient)
+    print(type(patient))
+    patient=np.int64(patient*10)
     patient=normalize(patient.reshape(1, -1))
     ############# ЗАГРУЖАЕМ РАНЕЕ ОБУЧЕННУЮ МОДЕЛЬ (МОДЕЛЬ ОБУЧЕНА С ПОМОЩЬЮ СКРИПТА model_build.py) #############
     from tensorflow import keras
-    model = keras.models.load_model("final_model")
+    model = keras.models.load_model("heart_model")
     patientsheart=model.predict(patient)
 
     score_disease=float(patientsheart)
