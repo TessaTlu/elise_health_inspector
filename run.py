@@ -39,7 +39,7 @@ while True:
             if event == 'Submit':
                 print("Passed")
                 print(scan_result(values[0]))
-        break
+        
 
 
 
