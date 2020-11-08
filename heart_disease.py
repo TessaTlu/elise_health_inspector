@@ -87,8 +87,7 @@ def heart():
     my_imputer = SimpleImputer(strategy = 'mean') 
     indexNames = heart_data[heart_data['target'] == 1].index
     heart_data_save=heart_data
-    heart_data.drop(indexNames , inplace=True) ######### ИЗБАВЛЯЕМСЯ В МАССИВЕ ДАННЫХ ОТ ПАЦИЕНТОВ, ИМЕЮЩИХ ПОРОК СЕРДЦА
-    healthy=heart_data
+    healthy = heart_data.drop(indexNames , inplace=True) ######### ИЗБАВЛЯЕМСЯ В МАССИВЕ ДАННЫХ ОТ ПАЦИЕНТОВ, ИМЕЮЩИХ ПОРОК СЕРДЦА
     healthy=healthy[features]
     healthy=np.array(healthy)
     patient=[age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak, slope, ca, thal]
