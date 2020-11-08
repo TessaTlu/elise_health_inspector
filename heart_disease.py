@@ -28,7 +28,6 @@ def heart():
     heart_data = pd.read_csv('heart.csv')
     y = heart_data.target
     features = ['age', 'sex', 'cp', 'trestbps', 'chol', 'fbs', 'restecg', 'thalach', 'exang', 'oldpeak', 'slope', 'ca', 'thal']
-    X = heart_data[features]
     os.system('cls' if os.name == 'nt' else 'clear')
     message = ["Hello, my name is Indi"] 
     typing_effect(message)
@@ -80,30 +79,32 @@ def heart():
     print("Had you heart defects before?") 
     print("Type 1 if not, 2 if your defect was fixed or 3 if you have reversable one") 
     thal=input()
-    
-    ########## ОБРАБОТКА ОТСУТСТВУЮЩИХ У ПОЛЬЗОВАТЕЯ АНАЛИЗОВ ##############
-    from sklearn.impute import SimpleImputer
-
-    my_imputer = SimpleImputer(strategy = 'mean') 
-    indexNames = heart_data[heart_data['target'] == 1].index
-    heart_data_save=heart_data
-    healthy = heart_data.drop(indexNames , inplace=True) ######### ИЗБАВЛЯЕМСЯ В МАССИВЕ ДАННЫХ ОТ ПАЦИЕНТОВ, ИМЕЮЩИХ ПОРОК СЕРДЦА
-    healthy=healthy[features]
-    healthy=np.array(healthy)
     patient=[age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak, slope, ca, thal]
-    skipped = 0
     for i in range(13):
         if(patient[i]==""):
             patient[i]=-1
-    patient = np.float32(np.array(patient))
-    
-    for i in range (len(patient)):
-        if(patient[i]==-1 or patient[i]== "Nan"):
-            patient[i]=float("Nan")
-            skipped +=1
-    healthy = np.vstack((healthy, patient))
+    ########## ОБРАБОТКА ОТСУТСТВУЮЩИХ У ПОЛЬЗОВАТЕЯ АНАЛИЗОВ ##############
+    from sklearn.impute import SimpleImputer
+
+    indexNames = heart_data[heart_data['target'] == 1].index
+    ######### Далее heart_data будет использована для того, чтобы заполнить пустые параметры пациента средними значениями среди
+    ######### ЗДОРОВЫХ испутыемых. Это сделано для того, чтобы дать более реалистичный прогноз - на планете далеко не половина людей
+    ######### имеет порок сердца.
+    healthy = (heart_data.drop(indexNames)).astype(heart_data.dtypes.to_dict())
+
+    healthy=healthy[features]
+
+    my_imputer = SimpleImputer(strategy = 'most_frequent', missing_values = -1) # Your code here
+
+            
+
+    healthy=np.float64(np.array(healthy))
+    healthy = np.vstack((healthy, patient)) ###### На этом этапе данные пациента становятся последней строчкой данных о здоровых
+                                                    ###### испытуемых.
+
     healthy = pd.DataFrame(healthy)
     imputed_healthy = pd.DataFrame(my_imputer.fit_transform(healthy))
+
     imputed_healthy=np.array(imputed_healthy)
     patient=imputed_healthy[-1]
     patient=np.int8(patient)
