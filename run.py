@@ -6,3 +6,15 @@ input()
 path_of_xray='test_image_for_pneumania_predict.jpeg'
 print(scan_result(path_of_xray))
 input()
+
+
+
+
+
+
+
+
+
+
+
+
