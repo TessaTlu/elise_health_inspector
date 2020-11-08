@@ -91,10 +91,15 @@ def heart():
     healthy=heart_data
     healthy=healthy[features]
     healthy=np.array(healthy)
+    patient=[age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak, slope, ca, thal]
     skipped = 0
-    patient=np.array([age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak, slope, ca, thal])
+    for i in range(13):
+        if(patient[i]==""):
+            patient[i]=-1
+    patient = np.float32(np.array(patient))
+    
     for i in range (len(patient)):
-        if(patient[i]==-1):
+        if(patient[i]==-1 or patient[i]== "Nan"):
             patient[i]=float("Nan")
             skipped +=1
     healthy = np.vstack((healthy, patient))
