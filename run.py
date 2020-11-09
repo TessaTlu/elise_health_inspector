@@ -35,8 +35,12 @@ while True:
             if event == sg.WIN_CLOSED or event == 'Exit':
                 break
             if event == 'Submit':
-                print("Passed")
-                print(scan_result(values[0]))
+                result = scan_result(values[0])
+                if(result==0):
+                    print("Pneumani")
+                else:
+                    print("Normal")
+
         
 
 

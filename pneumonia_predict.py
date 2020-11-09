@@ -9,6 +9,10 @@ from tensorflow import keras
 def scan_result(file_name):
     img_size=150
     array=Image.open(file_name)
+    array=np.array(array)
+    if(len(array.shape)==3):
+        grayImage = cv2.cvtColor(array, cv2.COLOR_BGR2GRAY)
+        array=grayImage
     person = np.array(array)
     img_arr = person
     model = keras.models.load_model("x_ray_model")
