@@ -1,7 +1,5 @@
-
-import heart_disease
-from heart_disease import heart  ### Checking git posibilities
 from pneumonia_predict import scan_result
+from enter_results import person
 # heart()
 # input()
 # path_of_xray='test_image_for_pneumania_predict.jpeg'
@@ -20,7 +18,7 @@ while True:
     if event == sg.WIN_CLOSED or event == 'Exit':
         break
     if event == 'heart':
-        heart()
+        person()
     if event == 'x-ray':
         layout = [
             [sg.Text('File 1'), sg.InputText(), sg.FileBrowse()],

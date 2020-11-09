@@ -6,7 +6,6 @@ from tensorflow.keras import layers
 from tensorflow.keras import optimizers
 from tensorflow.keras import losses
 from tensorflow.keras import metrics
-from enter_results import person
 import time
 import sys
 import os
@@ -16,7 +15,7 @@ def normalize(sequences, dimension = 65536):
     for i, sequence in enumerate(sequences):
         results[i, sequence]=1
     return results
-def heart():
+def heart(patient):
     def typing_effect(words):
         for typing in words[0]: 
             time.sleep(0.02) 
@@ -27,7 +26,7 @@ def heart():
     y = heart_data.target
     features = ['age', 'sex', 'cp', 'trestbps', 'chol', 'fbs', 'restecg', 'thalach', 'exang', 'oldpeak', 'slope', 'ca', 'thal']
     ###### ЭТАП ВВОДА ДАННЫХ ПОЛЬЗОВАТЕЛЯ С КЛАВИАТУРЫ ###########
-    patient=person()
+
     for i in range(13):
         if(patient[i]==""):
             patient[i]= np.nan

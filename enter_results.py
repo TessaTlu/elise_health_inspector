@@ -1,3 +1,4 @@
+from heart_disease import heart
 def person():    
     print("Hello, my name is Indi")
     
@@ -44,4 +45,4 @@ def person():
     print("Type 1 if not, 2 if your defect was fixed or 3 if you have reversable one") 
     thal=input()
     patient=[age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak, slope, ca, thal]
-    return patient
+    heart(patient)
