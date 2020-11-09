@@ -45,7 +45,6 @@ while True:
                 else:
                     print("I did not find any reason to be worry")
                     print("but if you have symptoms of pneumonia, you should consult your doctor")
-        
 
 
 
