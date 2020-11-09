@@ -12,4 +12,4 @@ So here is instruction how to use Indi:
 2) python run.py 
 3) If you will press xray and after that heart my code would be crashed +_+ 
    So pls press in this order: 'hear', 'xray' 
-4) If you want to upload your chest x-ray make sure that your photo looks like test_image
+4) If you want to upload your chest x-ray make sure that your photo looks like test_image_for_pneumania_predict
