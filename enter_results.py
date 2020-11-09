@@ -1,7 +1,5 @@
 from heart_disease import heart
-import os
-def person():   
-    os.system('cls' if os.name == 'nt' else 'clear') 
+def person():    
     print("Hello, my name is Indi")
     
     print("I am going give you advices based on your analysis results")

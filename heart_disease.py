@@ -25,6 +25,8 @@ def heart(patient):
     heart_data = pd.read_csv('heart.csv')
     y = heart_data.target
     features = ['age', 'sex', 'cp', 'trestbps', 'chol', 'fbs', 'restecg', 'thalach', 'exang', 'oldpeak', 'slope', 'ca', 'thal']
+    ###### ЭТАП ВВОДА ДАННЫХ ПОЛЬЗОВАТЕЛЯ С КЛАВИАТУРЫ ###########
+
     for i in range(13):
         if(patient[i]==""):
             patient[i]= np.nan
