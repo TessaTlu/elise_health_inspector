@@ -16,20 +16,17 @@ def normalize(sequences, dimension = 65536):
         results[i, sequence]=1
     return results
 def heart(patient):
-    def typing_effect(words):
-        for typing in words[0]: 
-            time.sleep(0.02) 
-            sys.stdout.write(typing)
-            sys.stdout.flush()
+    skipped_anal=0
     ### Загрузка данных, деление на тестовые и обучающие данные ###
     heart_data = pd.read_csv('heart.csv')
     y = heart_data.target
     features = ['age', 'sex', 'cp', 'trestbps', 'chol', 'fbs', 'restecg', 'thalach', 'exang', 'oldpeak', 'slope', 'ca', 'thal']
     for i in range(13):
         if(patient[i]==""):
-            patient[i]= np.nan
+            patient[i]= np.nan               ####### ПРИВЕДЕНИЕ НЕ ВВЕДЁННЫХ ПОЛЬЗОВАТЕЛЕМ ДАННЫХ К НОРМАЛЬНОМУ ВИДУ
+            skipped_anal +=1
         else:
-            patient[i]=np.int64(patient[i])
+            patient[i]=np.int64(patient[i])  
     patient = np.array(patient)
     ########## ОБРАБОТКА ОТСУТСТВУЮЩИХ У ПОЛЬЗОВАТЕЯ АНАЛИЗОВ ##############
     from sklearn.impute import SimpleImputer
@@ -42,7 +39,7 @@ def heart(patient):
 
     healthy=healthy[features]
 
-    my_imputer = SimpleImputer(strategy = 'most_frequent') # Your code here
+    my_imputer = SimpleImputer(strategy = 'most_frequent') 
 
             
 
@@ -70,16 +67,20 @@ def heart(patient):
     patientsheart=int(patientsheart)
 
     os.system('cls' if os.name == 'nt' else 'clear')
-    if((score_disease>=0.45 and score_disease<=0.55 and skipped > 0)):
-        print("I'm sorry, but the tests you entered aren't enough to make a prediction")
-        print("Try to pass more tests and come back again")
+
+    if(patientsheart==1):
+        print("Most likely you have a heart-disease")
+        print("you need to undergo a comprehensive examination to determine the cause of your heart disease")
+        print("dont worry, its fixable :*")
+        input()
     else:
-        if(patientsheart==1):
-            print("Most likely you have a heart-disease")
-            print("you need to undergo a comprehensive examination to determine the cause of your heart disease")
-            print("dont worry, its fixable :*")
-        else:
-            print("I did not find any reason to be worry")
-            print("have a nice day :3")
-    print(score_disease)
+        if(skipped_anal>3):
+            print("You have not several results so my prediction is not accurate enough")
+            print("If I see missing analysis I replace them by results of heatlhy human")
+            print("Just keep this in mind")
+        print("Following the results..")
+        print("I did not find any reason to be worry +_+")
+        print("Have a nice day!")
+        input()
+
     
