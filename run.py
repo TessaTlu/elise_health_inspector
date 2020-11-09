@@ -19,6 +19,7 @@ while True:
         break
     if event == 'heart':
         person()
+        break
     if event == 'x-ray':
         layout = [
             [sg.Text('File 1'), sg.InputText(), sg.FileBrowse()],
@@ -45,7 +46,7 @@ while True:
                 else:
                     print("I did not find any reason to be worry")
                     print("but if you have symptoms of pneumonia, you should consult your doctor")
-
+        break
 
 
 
