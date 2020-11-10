@@ -2,7 +2,7 @@
 
 Hello, this is my first pet-project 
 
-Indi is a combination of a simple interface, convolutional and classic neural networks based on the scikit-learn, pandas, opencv and tensorflow
+Indi is a combination of a simple interface, convolutional and classic neural networks based on the scikit-learn, pandas, opencv and tensorflow.
 
 Indi can predict heart disease with 97% accuracy and pneumonia with 92% accuracy. If you do not trust to this numbers you can check it yourself.
 1) To check accuracy of heart_model you can run model_build.py
