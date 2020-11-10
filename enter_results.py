@@ -7,7 +7,7 @@ def person():
     print("I am going give you advices based on your analysis results")
     print("to talk about your health prepare latests analysis +_+")
 
-    print("If you have not some analysis, type -1 instead of result")
+    print("If you have not some analysis, press enter instead of typing result")
   
     print("Firstly, how old are you?")
   
