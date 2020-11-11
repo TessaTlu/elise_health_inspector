@@ -46,7 +46,7 @@ model.compile(optimizer='rmsprop',
 ### Этап обучения 
 history = model.fit(x_train,
                    y_train,
-                   epochs=13,
+                   epochs=12,
                    batch_size=16,
                    validation_data=(x_test, y_test))
 model.save("heart_model")
