@@ -11,5 +11,9 @@ Indi can predict heart disease with 97% accuracy and pneumonia with 92% accuracy
 Indi_health_inspector is still being developed. In the future, I'm going to change the interface and add a few other options.
 So here is instruction how to use Indi:
 1) Download archive of project
-2) python run.py 
-3) If you want to upload your chest x-ray make sure that your photo looks like test_image_for_pneumania_predict
+2) Before running you should install some packages, run cmd in folder with project and type this:
+  pip install -r requirements.txt
+3) Now you can launch project: python run.py
+4) If you want to upload your chest x-ray make sure that your photo looks like test_image_for_pneumania_predict
+
+
