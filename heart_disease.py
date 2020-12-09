@@ -1,22 +1,13 @@
 import pandas as pd
 import numpy as np  
-from sklearn.model_selection import train_test_split
-from tensorflow.keras import models 
-from tensorflow.keras import layers
-from tensorflow.keras import optimizers
-from tensorflow.keras import losses
-from tensorflow.keras import metrics
+import joblib
 import time
 import sys
 import os
-######### НЕОБХОДИМАЯ ДЛЯ ПОДГОТОВКИ ДАННЫХ ФУНКЦИЯ ###############
-def normalize(sequences, dimension = 65536):
-    results = np.zeros((len(sequences), dimension))
-    for i, sequence in enumerate(sequences):
-        results[i, sequence]=1
-    return results
+from sklearn.model_selection import train_test_split
+from xgboost import XGBClassifier
 def heart(patient):
-    skipped_anal=0
+    skipped = 0
     ### Загрузка данных, деление на тестовые и обучающие данные ###
     heart_data = pd.read_csv('heart.csv')
     y = heart_data.target
@@ -24,47 +15,32 @@ def heart(patient):
     for i in range(13):
         if(patient[i]==""):
             patient[i]= np.nan               ####### ПРИВЕДЕНИЕ НЕ ВВЕДЁННЫХ ПОЛЬЗОВАТЕЛЕМ ДАННЫХ К НОРМАЛЬНОМУ ВИДУ
-            skipped_anal +=1
-        else:
-            patient[i]=np.int64(patient[i])  
-    patient = np.array(patient)
+            skipped = skipped + 1
+  #          patient[i]=np.int64(patient[i])  
+   # patient = np.array(patient)
     ########## ОБРАБОТКА ОТСУТСТВУЮЩИХ У ПОЛЬЗОВАТЕЯ АНАЛИЗОВ ##############
     from sklearn.impute import SimpleImputer
 
     indexNames = heart_data[heart_data['target'] == 1].index
-    ######### Далее heart_data будет использована для того, чтобы заполнить пустые параметры пациента средними значениями среди
+    ######### Далее heart_data будет использована для того, чтобы заполнить пустые параметры пациента наиболее часто встречающимися значениями среди
     ######### ЗДОРОВЫХ испутыемых. Это сделано для того, чтобы дать более реалистичный прогноз - на планете далеко не половина людей
     ######### имеет порок сердца.
     healthy = (heart_data.drop(indexNames)).astype(heart_data.dtypes.to_dict())
 
     healthy=healthy[features]
+    my_imputer = SimpleImputer(strategy = 'mean') 
 
-    my_imputer = SimpleImputer(strategy = 'most_frequent') 
 
-            
+    healthy =healthy.append(pd.Series(patient, index = healthy.columns), ignore_index=True)       
 
-    healthy=np.float64(np.array(healthy))
-    healthy = np.vstack((healthy, patient)) ###### На этом этапе данные пациента становятся последней строчкой данных о здоровых
-                                                    ###### испытуемых.
+    imputed_healthy = pd.DataFrame(my_imputer.fit_transform(healthy), columns = features)
 
-    healthy = pd.DataFrame(healthy)
-    imputed_healthy = pd.DataFrame(my_imputer.fit_transform(healthy))
+    patient=imputed_healthy.iloc[-1:]
 
-    imputed_healthy=np.array(imputed_healthy)
-    patient=imputed_healthy[-1]
-    patient = np.array(patient)
-    print(patient)
-    print(type(patient))
-    patient=np.int64(patient*10)
-    patient=normalize(patient.reshape(1, -1))
     ############# ЗАГРУЖАЕМ РАНЕЕ ОБУЧЕННУЮ МОДЕЛЬ (МОДЕЛЬ ОБУЧЕНА С ПОМОЩЬЮ СКРИПТА model_build.py) #############
-    from tensorflow import keras
-    model = keras.models.load_model("heart_model")
-    patientsheart=model.predict(patient)
+    loaded_model = joblib.load("heart_model.dat")
+    patientsheart = np.int(loaded_model.predict(patient))
 
-    score_disease=float(patientsheart)
-    patientsheart=np.int64(np.around(patientsheart, decimals=0))
-    patientsheart=int(patientsheart)
 
     os.system('cls' if os.name == 'nt' else 'clear')
 
@@ -74,7 +50,7 @@ def heart(patient):
         print("dont worry, its fixable :*")
         input()
     else:
-        if(skipped_anal>3):
+        if(skipped>3):
             print("You have not several results so my prediction is not accurate enough")
             print("If I see missing analysis I replace them by results of heatlhy human")
             print("Just keep this in mind")
