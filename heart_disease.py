@@ -16,26 +16,24 @@ def heart(patient):
         if(patient[i]==""):
             patient[i]= np.nan               ####### ПРИВЕДЕНИЕ НЕ ВВЕДЁННЫХ ПОЛЬЗОВАТЕЛЕМ ДАННЫХ К НОРМАЛЬНОМУ ВИДУ
             skipped = skipped + 1
-  #          patient[i]=np.int64(patient[i])  
-   # patient = np.array(patient)
     ########## ОБРАБОТКА ОТСУТСТВУЮЩИХ У ПОЛЬЗОВАТЕЯ АНАЛИЗОВ ##############
     from sklearn.impute import SimpleImputer
 
     indexNames = heart_data[heart_data['target'] == 1].index
-    ######### Далее heart_data будет использована для того, чтобы заполнить пустые параметры пациента наиболее часто встречающимися значениями среди
+    ######### Далее heart_data будет использована для того, чтобы заполнить пустые параметры пациента средними значениями среди
     ######### ЗДОРОВЫХ испутыемых. Это сделано для того, чтобы дать более реалистичный прогноз - на планете далеко не половина людей
     ######### имеет порок сердца.
-    healthy = (heart_data.drop(indexNames)).astype(heart_data.dtypes.to_dict())
+    healthy = (heart_data.drop(indexNames)).astype(heart_data.dtypes.to_dict()) ### Теперь healthy содержит данные только здоровых испытуемых
 
     healthy=healthy[features]
-    my_imputer = SimpleImputer(strategy = 'mean') 
+    my_imputer = SimpleImputer(strategy = 'mean')                               ### Заменять отсутствующие данные будем средними значениями 
 
 
-    healthy =healthy.append(pd.Series(patient, index = healthy.columns), ignore_index=True)       
+    healthy =healthy.append(pd.Series(patient, index = healthy.columns), ignore_index=True)         ### Добавим в конец дата фрейма данные о пациенте
 
-    imputed_healthy = pd.DataFrame(my_imputer.fit_transform(healthy), columns = features)
+    imputed_healthy = pd.DataFrame(my_imputer.fit_transform(healthy), columns = features)           ### Используем imputer
 
-    patient=imputed_healthy.iloc[-1:]
+    patient=imputed_healthy.iloc[-1:]                       ### Заменяем patient на обработанную строку из дата фрейма                                               
 
     ############# ЗАГРУЖАЕМ РАНЕЕ ОБУЧЕННУЮ МОДЕЛЬ (МОДЕЛЬ ОБУЧЕНА С ПОМОЩЬЮ СКРИПТА model_build.py) #############
     loaded_model = joblib.load("heart_model.dat")
