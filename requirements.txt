@@ -1,0 +1,9 @@
+xgboost
+scikit-learn  
+joblib
+pandas
+numpy
+tensorflow
+opencv-python 
+pillow 
+pysimplegui

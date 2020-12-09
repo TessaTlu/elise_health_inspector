@@ -1,6 +1,5 @@
 from tensorflow.keras import models
 import numpy as np
-import matplotlib.pyplot as plt
 import PIL as Image
 from PIL import Image
 import cv2
